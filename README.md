@@ -23,7 +23,7 @@ annotating phonemes.
 
 ## Coarticulation measure
 
-To avoid time-consuming annotation, *cepstral flux* can be used as an approximate measure for coarticulation. [ward2021](#references) previously noted that cepstral flux is high when the speaking rate is high and during very creaky regions, is low during silence, and is moderately low during lengthening. If the hypothesis is correct, then this measure should be higher in word boundaries for the ASD group compared to the NT group (more sudden mouth movement for the ASD group).
+To avoid time-consuming annotation, *cepstral flux* can be used as an approximate measure for coarticulation. [ward2021](#references) previously noted that cepstral flux is high when the speaking rate is high and during very creaky regions, is low during silence, and is moderately low during lengthening. If the hypothesis is correct, then this measure should be higher at word boundaries for the ASD group compared to the NT group (more sudden mouth movement for the ASD group).
 
 The algorithm, implemented in `cepstralFluxModified.m`, works as follows: (1) compute the first 13 *mel-frequency cepstral coefficients (MFCCs)* for each window from the input speech signal, (2) compute the sum of the squared differences for each coefficient between consecutive windows, and (3) output the resulting vector of length `N_WINDOWS-1`.
 
@@ -55,12 +55,20 @@ I did not adjust the annotations and decided to move on to the next experiment.
 ## Experiment 2: Coarticulation across all utterances (groups)
 
 I extracted all child utterances for both ASD and NT groups. For each group, I
-computed the coarticulation measure of all utterances, then plotted the measures
-in a histogram, normalizing bin counts.
+computed the coarticulation measure across all utterances, then plotted the measures
+in a histogram, normalizing bin counts. I assumed that using all of the
+available speech, beyond just word boundaries, would reveal a broader distinction between the two groups.
 
 ![histogram_dialog](/images/histogram_dialog.png)
 
-Bin counts are mostly overlapping, however there are some differences. The NT group tends to have more average coarticulation (red bars in middle), while the ASD group tends to have less coarticulation (blue bars on left). These differences are not significant enough to differentiate the groups with the measure alone. To confirm, I tested a linear regression model. I labeled NT frames as class 0 and ASD frames as class 1. Most if not all predictions were approximately 0.5. Testing different thresholds to assign each prediction to a class, the best MSE was 0.25 which is no better than random.
+Bin counts are mostly overlapping, however there are some differences. The ASD
+group tends to have more cases of stable articulatory configuration, reflecting
+possibly phoneme lengthening and/or lack of coarticulation. These differences are not
+significant enough to differentiate the groups with the measure alone. To
+confirm, I tested a linear regression model. I labeled NT frames as class 0 and
+ASD frames as class 1. Most if not all predictions were approximately 0.5.
+Testing different thresholds to assign each prediction to a class, the best MSE
+was 0.25 which is no better than random.
 
 ## Experiment 3: Coarticulation across all utterances, (pairs)
 
